@@ -9,6 +9,20 @@
 <body class="d-flex flex-column min-vh-100">
 
 <style>
+  :root {
+    --auth-bg: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=2000&auto=format&fit=crop');
+  }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background:
+      linear-gradient(rgba(247, 138, 138, 0.85), rgba(255, 255, 255, 0.85)),
+      var(--auth-bg) center/cover no-repeat fixed;
+  }
+  .auth-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+  }
   .flash-messages {
     position: fixed;
     top: 16px;

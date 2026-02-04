@@ -32,7 +32,7 @@
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
     <div>
-      <h3 class="text-success fw-bold hero-title">Customer Dashboard</h3>
+      <h3 class="text-success fw-bold hero-title">🧑 Customer Dashboard</h3>
       <div class="text-muted meta">Fresh picks curated just for you</div>
     </div>
     <h4 class="mt-2 mt-md-0">👋 Welcome, {{ request.user.username }}</h4>
@@ -43,7 +43,7 @@
       <input type="hidden" name="q" value="{{ query }}">
     {% endif %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-      <label class="form-label fw-semibold">Category</label>
+      <label class="form-label fw-semibold">Category :</label>
       <select name="category" class="form-select">
         <option value="">All Categories</option>
         {% for value, label in categories %}
@@ -77,14 +77,16 @@
             <div class="text-muted meta mb-1">Farmer: {{ product.farmer.user.username }}</div>
             <div class="meta mb-1">
               {% if product.review_count %}
-                <span class="badge bg-warning text-dark">? {{ product.avg_rating|floatformat:1 }}</span>
+                <span class="badge bg-warning text-dark">⭐ {{ product.avg_rating|floatformat:1 }}</span>
                 <span class="text-muted">({{ product.review_count }} reviews)</span>
               {% else %}
                 <span class="text-muted">No reviews yet</span>
               {% endif %}
             </div>
             <div class="text-muted meta mb-2">
-              Harvest: {{ product.harvest_date|default:"N/A" }} ??
+              Harvest: {{ product.harvest_date|default:"N/A" }} 
+              </div>
+              <div class="text-muted meta mb-2">
               Expiry: {{ product.expiry_date|default:"N/A" }}
             </div>
 

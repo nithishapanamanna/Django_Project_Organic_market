@@ -6,15 +6,15 @@ from django.http import HttpResponseForbidden
 from farmer.models import FarmerProfile
 from products.models import Product
 from orders.models import Order
-from django.db.models import Sum,Count
+from django.db.models import Sum
+from django.db.models.functions import TruncDay, TruncMonth
+from django.utils import timezone
+from datetime import timedelta
+import json
 from .models import Payment
-
 from django.contrib.auth import get_user_model
 User = get_user_model()
-
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
-from .decorators import admin_required
 
 def home(request):
     return render(request, 'home.html')
@@ -63,9 +63,43 @@ def admin_dashboard(request):
     total_orders = Order.objects.count()
     approved_orders = Order.objects.exclude(status='PENDING').count()
 
-    revenue = Order.objects.filter(
-        status__in=['PAID', 'DELIVERED']
-    ).aggregate(total=Sum('total_amount'))['total'] or 0
+    revenue_qs = Order.objects.filter(status__in=['PAID', 'DELIVERED'])
+    revenue = revenue_qs.aggregate(total=Sum('total_amount'))['total'] or 0
+
+    # Daily revenue (last 7 days)
+    today = timezone.localdate()
+    daily_start = today - timedelta(days=6)
+    daily_qs = (
+        revenue_qs.filter(created_at__date__gte=daily_start)
+        .annotate(day=TruncDay('created_at'))
+        .values('day')
+        .annotate(total=Sum('total_amount'))
+        .order_by('day')
+    )
+    daily_map = {row['day'].date(): float(row['total'] or 0) for row in daily_qs}
+    daily_labels = [(daily_start + timedelta(days=i)).strftime('%d %b') for i in range(7)]
+    daily_values = [daily_map.get(daily_start + timedelta(days=i), 0) for i in range(7)]
+
+    # Monthly revenue (last 12 months)
+    monthly_start = (today.replace(day=1) - timedelta(days=365)).replace(day=1)
+    monthly_qs = (
+        revenue_qs.filter(created_at__date__gte=monthly_start)
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Sum('total_amount'))
+        .order_by('month')
+    )
+    monthly_labels = []
+    monthly_values = []
+    month_cursor = monthly_start
+    for _ in range(12):
+        monthly_labels.append(month_cursor.strftime('%b %Y'))
+        month_cursor = (month_cursor.replace(day=28) + timedelta(days=4)).replace(day=1)
+    monthly_map = {row['month'].date().replace(day=1): float(row['total'] or 0) for row in monthly_qs}
+    month_cursor = monthly_start
+    for _ in range(12):
+        monthly_values.append(monthly_map.get(month_cursor, 0))
+        month_cursor = (month_cursor.replace(day=28) + timedelta(days=4)).replace(day=1)
 
     status_data = {
         'pending': Order.objects.filter(status='PENDING').count(),
@@ -95,6 +129,10 @@ def admin_dashboard(request):
         'revenue': revenue,
         'status_data': status_data,
         'status_total': status_total,
+        'daily_labels': json.dumps(daily_labels),
+        'daily_values': json.dumps(daily_values),
+        'monthly_labels': json.dumps(monthly_labels),
+        'monthly_values': json.dumps(monthly_values),
     })
 
 @staff_member_required
@@ -128,13 +166,6 @@ def reject_farmer(request, farmer_id):
 
 
 @staff_member_required
-def pending_farmers(request):
-    farmers = FarmerProfile.objects.filter(is_verified=False)
-    return render(request, 'admin/pending_farmers.html', {
-        'farmers': farmers
-    })
-
-@staff_member_required
 def approve_products(request):
     products = Product.objects.filter(is_approved=False)
 
@@ -149,16 +180,8 @@ def approve_products(request):
     })
 
 @staff_member_required
-def reject_product(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    product.delete()
-    messages.error(request, "Product rejected")
-    return redirect('approve_products')
-from orders.models import Order
-
-@staff_member_required
 def manage_orders(request):
-    orders = Order.objects.all().order_by("-created_at")
+    orders = Order.objects.all().order_by("created_at")
 
     if request.method == "POST":
         order_id = request.POST.get("order_id")
@@ -207,10 +230,17 @@ def toggle_user_status(request, user_id):
 
     return redirect('manage_users')
 
-@admin_required
+@staff_member_required
 def manage_payments(request):
     payments = Payment.objects.all().order_by("-created_at")
+    total_revenue = (
+        Order.objects.filter(status__in=["PAID", "DELIVERED"])
+        .aggregate(total=Sum("total_amount"))
+        .get("total")
+        or 0
+    )
     return render(request, "accounts/payments.html", {
-        "payments": payments
+        "payments": payments,
+        "total_revenue": total_revenue,
     })
 

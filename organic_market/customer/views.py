@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required
 from orders.models import Order
 from products.models import Product
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count
-from django.db.models import Q
+from django.db.models import Avg, Count,Q
 from .forms import CustomerProfileForm
 from .models import CustomerProfile
 from django.contrib.auth import get_user_model

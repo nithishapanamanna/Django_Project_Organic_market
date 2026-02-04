@@ -1,8 +1,7 @@
 from django.conf import settings
 from decimal import Decimal
 import razorpay 
-from django.shortcuts import render, redirect                   
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse    
 from django.contrib.auth.decorators import login_required
 from cart.models import Cart
@@ -52,26 +51,6 @@ def place_order(request):
     cart_items.delete()
     request.session.pop('promo_code', None)
     return redirect('orders:my_orders')
-
-# @login_required
-# def place_order(request):
-#     cart_items = Cart.objects.filter(user=request.user)
-
-#     if not cart_items.exists():
-#         return redirect('cart_detail')
-
-#     total = sum(item.subtotal() for item in cart_items)
-
-#     Order.objects.create(
-#         user=request.user,
-#         total_amount=total,
-#         payment_method='COD'
-#     )
-
-#     cart_items.delete()
-#     return redirect('orders:my_orders')
-
-
 
 @login_required
 def my_orders(request):

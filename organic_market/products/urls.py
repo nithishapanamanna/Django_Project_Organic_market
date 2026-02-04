@@ -21,9 +21,8 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
-    path('products/', product_list, name='product_list'),
+    # path('products/', product_list, name='product_list'),
     path('products/<int:product_id>/', product_detail, name='product_detail'),
-    # path('add_product/', add_product, name='add_product'),
     path('farmer_products/', farmer_products, name='farmer_products'),
     path('ajax/filter-products/', product_filter, name='ajax_filter_products'),
 

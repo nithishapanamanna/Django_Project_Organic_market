@@ -1,19 +1,14 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, get_user_model
 from products.forms import ProductForm
 from .forms import FarmerRegisterForm, FarmerProfileForm
-from .models import FarmerProfile
 from products.models import Product
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
 from orders.models import OrderItem
 from django.db.models import Sum, F
 from django.core.paginator import Paginator
-from urllib3 import request
-from django.contrib.auth import get_user_model
 User = get_user_model()
-from django.contrib import messages
 
 # ---------- FARMER REGISTER ----------
 def farmer_register(request):
@@ -40,8 +35,6 @@ def farmer_register(request):
 
         else:
             messages.error(request, "Registration failed.")
-            print(user_form.errors)   # keep for now
-            print(profile_form.errors)   # keep for now
 
     else:
         user_form = FarmerRegisterForm()
@@ -80,7 +73,7 @@ def farmer_dashboard(request):
     if request.user.role != 'FARMER':
         return redirect('farmer_login')
 
-    farmer = request.user.farmer_profile  # safe (OneToOne)
+    farmer = request.user.farmer_profile  
 
     products = Product.objects.filter(farmer=farmer).order_by('-id')
     approved_products = products.filter(is_approved=True)

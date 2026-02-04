@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Admin Dashboard</title>
@@ -20,10 +20,14 @@
         }
         .chart-card {
             height: 360px;
+            display: flex;
+            flex-direction: column;
         }
         .chart-canvas {
             width: 100%;
-            height: 260px;
+            height: 100%;
+            flex: 1;
+            min-height: 0;
         }
         .chart-legend-note {
             font-size: 0.8rem;
@@ -39,7 +43,7 @@
 
     <div class="d-flex align-items-center gap-4">
 
-        <!-- Farmer Notification -->
+        <!-- 🔔Farmer Notification -->
         <a href="{% url 'verify_farmers' %}" class="text-white text-decoration-none">
             👨‍🌾 Farmers
             {% if pending_farmer_count > 0 %}
@@ -97,45 +101,6 @@
 <div class="container-fluid p-4">
 
     <h3 class="mb-4 fw-bold">📊 Admin Dashboard</h3>
-<!-- 🔔 Notifications -->
-  <div class="alert alert-warning d-flex justify-content-between">
-    <div>👨‍🌾 Pending Farmers: <b>{{ pending_farmer_count }}</b></div>
-    <div>📦 Pending Products: <b>{{ pending_product_count }}</b></div>
-  </div>
-    <h3>
-    Pending Farmer Approvals
-    {% if pending_count %}
-        <span style="color:red;">({{ pending_count }})</span>
-    {% endif %}
-    </h3>
-
-    {% if pending_farmers %}
-    <table class="table table-bordered table-hover bg-white shadow-sm">
-    <thead>
-    <tr>
-        <th>Username</th>
-        <th>Registered On</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-
-    {% for farmer in pending_farmers %}
-    <tr>
-        <td>{{ farmer.user.username }}</td>
-        <td>{{ farmer.created_at }}</td>
-        <td>
-        <a href="{% url 'approve_farmer' farmer.id %}">
-            <button>Approve</button>
-        </a>
-        </td>
-    </tr>
-    {% endfor %}
-    </table>
-    {% else %}
-    <p>No pending farmers 🎉</p>
-    {% endif %}
-
-
 
     <!-- STAT CARDS -->
     <div class="row g-4 mb-4">
@@ -193,11 +158,15 @@
             </div>
         </div>
 
-        <!-- Revenue Chart (Dummy monthly) -->
+        <!-- Revenue Charts -->
         <div class="col-md-6">
             <div class="card shadow-sm p-3 chart-card">
-                <h6 class="fw-bold mb-3">Revenue Trend</h6>
-                <canvas id="revenueChart" class="chart-canvas"></canvas>
+                <h6 class="fw-bold mb-3">Daily Revenue (Last 7 Days)</h6>
+                <canvas id="dailyRevenueChart" class="chart-canvas"></canvas>
+            </div>
+            <div class="card shadow-sm p-3 chart-card mt-3">
+                <h6 class="fw-bold mb-3">Monthly Revenue (Last 12 Months)</h6>
+                <canvas id="monthlyRevenueChart" class="chart-canvas"></canvas>
             </div>
         </div>
 
@@ -275,16 +244,36 @@
         plugins: [ChartDataLabels]
     });
 
-    // REVENUE LINE CHART (Sample)
-    const revenueCtx = document.getElementById('revenueChart');
-    new Chart(revenueCtx, {
+    // DAILY REVENUE LINE CHART
+    const dailyRevenueCtx = document.getElementById('dailyRevenueChart');
+    new Chart(dailyRevenueCtx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            labels: {{ daily_labels|safe }},
             datasets: [{
-                label: 'Revenue',
-                data: [12000, 19000, 15000, 22000, {{ revenue }}],
+                label: 'Daily Revenue',
+                data: {{ daily_values|safe }},
                 borderColor: '#198754',
+                fill: false,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // MONTHLY REVENUE LINE CHART
+    const monthlyRevenueCtx = document.getElementById('monthlyRevenueChart');
+    new Chart(monthlyRevenueCtx, {
+        type: 'line',
+        data: {
+            labels: {{ monthly_labels|safe }},
+            datasets: [{
+                label: 'Monthly Revenue',
+                data: {{ monthly_values|safe }},
+                borderColor: '#0d6efd',
                 fill: false,
                 tension: 0.4
             }]
@@ -297,4 +286,4 @@
 </script>
 
 </body>
-</html> 
+</html>

@@ -1,10 +1,5 @@
 {% extends "accounts/admin_base.html" %}
 {% block content %}
-<head>
-    <title>Verify Farmers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
 
 <div class="container mt-4">
 
@@ -13,6 +8,7 @@
     <table class="table table-bordered table-hover bg-white shadow-sm">
         <thead class="table-success">
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Location</th>
@@ -24,6 +20,7 @@
         <tbody>
         {% for farmer in farmers %}
             <tr>
+                <td>#{{ farmer.id }}</td>
                 <td>{{ farmer.user.username }}</td>
                 <td>{{ farmer.phone }}</td>
                 <td>{{ farmer.location }}</td>
@@ -50,7 +47,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="5" class="text-center text-muted">
+                <td colspan="6" class="text-center text-muted">
                     No farmers found
                 </td>
             </tr>
@@ -60,5 +57,4 @@
 
 </div>
 
-</body>
 {% endblock %}
