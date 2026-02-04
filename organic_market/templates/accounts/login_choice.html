@@ -1,0 +1,114 @@
+{% extends 'auth_base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  body { overflow: hidden; }
+  .login-bg {
+    background:
+      linear-gradient(rgba(247, 138, 138, 0.85), rgba(255,255,255,0.85)),
+      url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=2000&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+  }
+  .login-wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .login-card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background: #ffffff;
+  }
+  .login-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 50px rgba(0,0,0,0.22);
+  }
+  .login-card.farmer {
+    background: linear-gradient(180deg, #e9f7ef 0%, #ffffff 70%);
+  }
+  .login-card.customer {
+    background: linear-gradient(180deg, #e9f1ff 0%, #ffffff 70%);
+  }
+  .login-card.admin {
+    background: linear-gradient(180deg, #fff5e6 0%, #ffffff 70%);
+  }
+  .icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    background: #e9f7ef;
+    color: #198754;
+    font-size: 1.1rem;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(25,135,84,0.12);
+    color: #198754;
+  }
+</style>
+
+<div class="login-bg">
+  <div class="container login-wrap">
+    <div class="text-center mb-4">
+      <div class="tag">WELCOME</div>
+      <h2 class="fw-bold text-dark mt-2">Choose Your Login</h2>
+      <p class="text-muted">Access your dashboard based on your role</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 justify-content-center g-4">
+
+      <div class="col">
+        <div class="card login-card farmer h-100">
+          <div class="card-body text-center d-flex flex-column justify-content-between">
+            <div>
+              <div class="icon-circle">F</div>
+              <h5 class="mt-3">Farmer</h5>
+              <p class="text-muted">Manage products, stock & orders</p>
+            </div>
+            <a href="{% url 'farmer_login' %}" class="btn btn-success w-100">Farmer Login</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card login-card customer h-100">
+          <div class="card-body text-center d-flex flex-column justify-content-between">
+            <div>
+              <div class="icon-circle">C</div>
+              <h5 class="mt-3">Customer</h5>
+              <p class="text-muted">Buy fresh organic produce</p>
+            </div>
+            <a href="{% url 'customer_login' %}" class="btn btn-primary w-100">Customer Login</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card login-card admin h-100">
+          <div class="card-body text-center d-flex flex-column justify-content-between">
+            <div>
+              <div class="icon-circle">A</div>
+              <h5 class="mt-3">Admin</h5>
+              <p class="text-muted">Platform control & verification</p>
+            </div>
+            <a href="{% url 'admin_login' %}" class="btn btn-dark w-100">Admin Login</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

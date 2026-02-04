@@ -1,0 +1,115 @@
+{% extends 'accounts/admin_base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+
+  <h3 class="fw-bold mb-4">🧑‍💼 Manage Users</h3>
+
+  <!-- Filter -->
+  <form method="get" class="mb-3">
+    <select name="role" class="form-select w-25 d-inline">
+      <option value="">All Roles</option>
+      <option value="ADMIN" {% if selected_role == "ADMIN" %}selected{% endif %}>Admin</option>
+      <option value="FARMER" {% if selected_role == "FARMER" %}selected{% endif %}>Farmer</option>
+      <option value="CUSTOMER" {% if selected_role == "CUSTOMER" %}selected{% endif %}>Customer</option>
+    </select>
+    <button class="btn btn-dark ms-2">Filter</button>
+  </form>
+
+  <!-- Users Table -->
+  <table class="table table-bordered table-hover bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Date Joined</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email|default:"—" }}</td>
+        <td>
+          {% if user.role %}
+            <span class="badge 
+              {% if user.role == 'ADMIN' %}bg-danger
+              {% elif user.role == 'FARMER' %}bg-success
+              {% else %}bg-primary{% endif %}">
+              {{ user.role }}
+            </span>
+          {% elif user.customerprofile_set.exists %}
+            <span class="badge bg-primary">CUSTOMER</span>
+          {% else %}
+            <span class="badge bg-secondary">UNKNOWN</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if user.is_active %}
+            <span class="badge bg-success">Active</span>
+          {% else %}
+            <span class="badge bg-secondary">Disabled</span>
+          {% endif %}
+        </td>
+        <td>{{ user.date_joined|date:"d M Y" }}</td>
+        <td>
+          <a href="{% url 'toggle_user_status' user.id %}"
+             class="btn btn-sm {% if user.is_active %}btn-danger{% else %}btn-success{% endif %}">
+             {% if user.is_active %}Disable{% else %}Enable{% endif %}
+          </a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          No users found
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}
+
+{% comment %} {% extends "accounts/admin_base.html" %}
+{% block content %}
+<div class="container mt-4">
+<h4 class="fw-bold">👥 Manage Users</h4>
+
+<table class="table table-bordered mt-3">
+<tr>
+<th>Username</th>
+<th>Role</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for user in users %}
+<tr>
+<td>{{ user.username }}</td>
+<td>{{ user.role }}</td>
+<td>
+<span class="badge {% if user.is_active %}bg-success{% else %}bg-danger{% endif %}">
+{{ user.is_active|yesno:"Active,Inactive" }}
+</span>
+</td>
+<td>
+<form method="post">
+{% csrf_token %}
+<input type="hidden" name="user_id" value="{{ user.id }}">
+<button class="btn btn-sm btn-warning">Toggle</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,87 @@
+{% extends "accounts/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">🛠 Product Approval</h4>
+        <span class="badge bg-warning text-dark">
+            Pending: {{ products.count }}
+        </span>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+
+            {% if products %}
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Farmer</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            <strong>{{ product.name }}</strong><br>
+                            <small class="text-muted">
+                                {{ product.category }}
+                            </small>
+                        </td>
+
+                        <td>
+                            {{ product.farmer.user.username }}
+                        </td>
+
+                        <td>
+                            ₹{{ product.price }}
+                        </td>
+
+                        <td>
+                            {{ product.stock }}
+                        </td>
+
+                        <td class="text-center">
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button class="btn btn-success btn-sm">
+                                    ✔ Approve
+                                </button>
+                            </form>
+
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="reject_id" value="{{ product.id }}">
+                                <button class="btn btn-outline-danger btn-sm ms-1">
+                                    ✖ Reject
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <!-- Empty State -->
+            <div class="text-center p-5">
+                <img src="{% static 'images/empty-box.png' %}" width="120" class="mb-3">
+                <h6 class="text-muted">No products pending approval 🎉</h6>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

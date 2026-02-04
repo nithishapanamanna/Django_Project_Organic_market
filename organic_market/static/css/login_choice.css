@@ -1,0 +1,45 @@
+/* .login-card {
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.icon {
+  font-size: 48px;
+}
+
+.farmer-card {
+  border-top: 5px solid #198754;
+}
+
+.customer-card {
+  border-top: 5px solid #0d6efd;
+}
+
+.admin-card {
+  border-top: 5px solid #212529;
+} */
+
+.login-bg {
+  background: url("/static/images/loginpage_bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  position: center;
+}
+
+/* Dark overlay for readability */
+.login-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* Keep content above overlay */
+.login-bg > .container {
+  position: relative;
+  z-index: 1;
+}

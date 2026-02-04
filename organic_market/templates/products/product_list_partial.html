@@ -1,0 +1,10 @@
+{% block content %}
+{% for product in products %}
+<div class="card">
+  <h5>{{ product.name }}</h5>
+  <p>₹{{ product.price }}</p>
+</div>
+{% empty %}
+<p>No products found</p>
+{% endfor %}
+{% endblock %}

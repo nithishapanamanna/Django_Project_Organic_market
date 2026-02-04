@@ -1,0 +1,13 @@
+.product-card {
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.product-img {
+  object-fit: cover;
+}
+
+.card-title {
+  font-weight: 600;
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        .table thead th,
+        .table th {
+            background-color: #212529;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+        }
+        .chart-card {
+            height: 360px;
+        }
+        .chart-canvas {
+            width: 100%;
+            height: 260px;
+        }
+        .chart-legend-note {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+<nav class="navbar navbar-dark bg-dark px-4 d-flex justify-content-between">
+    
+    <span class="navbar-brand fw-bold"> 🔐 Admin Panel </span>
+
+    <div class="d-flex align-items-center gap-4">
+
+        <!-- Farmer Notification -->
+        <a href="{% url 'verify_farmers' %}" class="text-white text-decoration-none">
+            👨‍🌾 Farmers
+            {% if pending_farmer_count > 0 %}
+                <span class="badge bg-danger">
+                    {{ pending_farmer_count }}
+                </span>
+            {% endif %}
+        </a>
+
+        <!-- Product Notification -->
+        <a href="{% url 'approve_products' %}" class="text-white text-decoration-none">
+            📦 Products
+            {% if pending_product_count > 0 %}
+                <span class="badge bg-warning text-dark">
+                    {{ pending_product_count }}
+                </span>
+            {% endif %}
+        </a>
+
+        <!-- Order Notification -->
+        <a href="{% url 'manage_orders' %}" class="text-white text-decoration-none">
+            🛒 Orders
+            {% if pending_order_count > 0 %}
+                <span class="badge bg-info text-dark">
+                    {{ pending_order_count }}
+                </span>
+            {% endif %}
+        </a>
+
+        <!-- Payment Notification -->
+        <a href="{% url 'manage_payments' %}" class="text-white text-decoration-none">
+            💳 Payments
+            {% if pending_payment_count > 0 %}
+                <span class="badge bg-danger">
+                    {{ pending_payment_count }}
+                </span>
+            {% endif %}
+        </a>
+
+        <!-- Admin User -->
+        <span class="text-white">
+            👋 Welcome, {{ request.user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="flex-grow-1">
+<div class="container-fluid p-4">
+
+    <h3 class="mb-4 fw-bold">📊 Admin Dashboard</h3>
+<!-- 🔔 Notifications -->
+  <div class="alert alert-warning d-flex justify-content-between">
+    <div>👨‍🌾 Pending Farmers: <b>{{ pending_farmer_count }}</b></div>
+    <div>📦 Pending Products: <b>{{ pending_product_count }}</b></div>
+  </div>
+    <h3>
+    Pending Farmer Approvals
+    {% if pending_count %}
+        <span style="color:red;">({{ pending_count }})</span>
+    {% endif %}
+    </h3>
+
+    {% if pending_farmers %}
+    <table class="table table-bordered table-hover bg-white shadow-sm">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Registered On</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+
+    {% for farmer in pending_farmers %}
+    <tr>
+        <td>{{ farmer.user.username }}</td>
+        <td>{{ farmer.created_at }}</td>
+        <td>
+        <a href="{% url 'approve_farmer' farmer.id %}">
+            <button>Approve</button>
+        </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    <p>No pending farmers 🎉</p>
+    {% endif %}
+
+
+
+    <!-- STAT CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>👨‍🌾 Farmers</h5>
+                <p>Verify & manage</p>
+                <h6>Total Farmers</h6>
+                <h2 class="text-success">{{ total_farmers }}</h2>
+                <small class="text-muted">Verified: {{ verified_farmers }}</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>📦 Products</h5>
+                <p>Approve / Reject</p>
+                <h6>Total Products</h6>
+                <h2 class="text-primary">{{ total_products }}</h2>
+                <small class="text-muted">Approved: {{ approved_products }}</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>🛒 Orders</h5>
+                <p>Track orders</p>
+                <h6>Total Orders</h6>
+                <h2 class="text-warning">{{ total_orders }}</h2>
+                <small class="text-muted">Tracked: {{ approved_orders }}</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>💳 Payments</h5>
+                <p>Transactions</p>
+                <h6>Total Revenue</h6>
+                <h2 class="text-danger">₹ {{ revenue }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div class="row g-6">
+
+        <!-- Order Status Chart -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3 chart-card">
+                <h6 class="fw-bold mb-3">Order Status Overview</h6>
+                <canvas id="orderStatusChart" class="chart-canvas"></canvas>
+                <div class="chart-legend-note">Legend shows order status</div>
+            </div>
+        </div>
+
+        <!-- Revenue Chart (Dummy monthly) -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3 chart-card">
+                <h6 class="fw-bold mb-3">Revenue Trend</h6>
+                <canvas id="revenueChart" class="chart-canvas"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</main>
+
+<script>
+    // ORDER STATUS PIE CHART
+    const statusCtx = document.getElementById('orderStatusChart');
+    const statusCounts = [
+        {{ status_data.pending|default:0 }},
+        {{ status_data.shipped|default:0 }},
+        {{ status_data.delivered|default:0 }},
+        {{ status_data.cancelled|default:0 }}
+    ];
+    const statusTotal = {{ status_total|default:0 }};
+    const displayCounts = statusTotal > 0 ? statusCounts : [0, 0, 0, 0];
+    const pieData = statusTotal > 0 ? statusCounts : [1, 1, 1, 1];
+    new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
+            datasets: [{
+                data: pieData,
+                backgroundColor: ['#ffc107', '#0dcaf0', '#198754', '#dc3545']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 14,
+                        boxHeight: 14,
+                        padding: 12
+                    }
+                },
+                datalabels: {
+                    color: '#212529',
+                    font: {
+                        weight: '600',
+                        size: 11
+                    },
+                    formatter: (value, context) => {
+                        if (statusTotal === 0) {
+                            return '0 (0%)';
+                        }
+                        const displayValue = displayCounts[context.dataIndex] || 0;
+                        const percent = Math.round((displayValue / statusTotal) * 100);
+                        return `${displayValue} (${percent}%)`;
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            if (statusTotal === 0) {
+                                return `${label}: 0 (0%)`;
+                            }
+                            const value = displayCounts[context.dataIndex] || 0;
+                            const percent = Math.round((value / statusTotal) * 100);
+                            return `${label}: ${value} (${percent}%)`;
+                        }
+                    }
+                }
+            },
+            layout: {
+                padding: { top: 6, bottom: 6 }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+
+    // REVENUE LINE CHART (Sample)
+    const revenueCtx = document.getElementById('revenueChart');
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Revenue',
+                data: [12000, 19000, 15000, 22000, {{ revenue }}],
+                borderColor: '#198754',
+                fill: false,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+</body>
+</html> 

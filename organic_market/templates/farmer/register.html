@@ -1,0 +1,106 @@
+{% extends 'auth_base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  .register-wrap {
+    max-width: 520px;
+  }
+  .register-card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(25, 135, 84, 0.12);
+  }
+  .register-badge {
+    display: inline-block;
+    background: #198754;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+  .form-control, .form-select {
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .form-label {
+    font-weight: 600;
+  }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="register-wrap w-100">
+    <div class="text-center mb-3">
+      <span class="register-badge">FARMER SIGNUP</span>
+    </div>
+
+    <div class="card register-card">
+      <div class="card-body p-4">
+        <h3 class="fw-bold text-success text-center mb-1">Create Your Farmer Account</h3>
+        <p class="text-muted text-center mb-4">Join GreenHarvest and start selling fresh produce.</p>
+
+        {% for message in messages %}
+          <div class="alert alert-danger text-center">
+            {{ message }}
+          </div>
+        {% endfor %}
+
+        {% if user_form.errors or profile_form.errors %}
+          <div class="alert alert-danger">
+            <p class="mb-2">Please fix the errors below:</p>
+            {{ user_form.errors }}
+            {{ profile_form.errors }}
+          </div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="e.g., greenfarmer" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" placeholder="farmer@example.com" required>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-12 col-sm-6">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" name="password1" placeholder="Create password" required>
+            </div>
+            <div class="col-12 col-sm-6">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" name="password2" placeholder="Re-enter password" required>
+            </div>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-12 col-sm-6">
+              <label class="form-label">Phone</label>
+              <input type="text" class="form-control" name="phone" placeholder="10-digit number" required>
+            </div>
+            <div class="col-12 col-sm-6">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-control" name="location" placeholder="City, State" required>
+            </div>
+          </div>
+
+          <button class="btn btn-success w-100 mt-4">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+          <small class="text-muted">
+            Already have an account?
+            <a href="{% url 'farmer_login' %}" class="text-success fw-semibold text-decoration-none">Login</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

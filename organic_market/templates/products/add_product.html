@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f8; }
+        .form-box {
+            width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button {
+            background: green;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="form-box">
+    <h2>Add Organic Product</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Product Name">
+        <input type="text" name="category" placeholder="Category">
+        <input type="number" name="price" placeholder="Price">
+        <input type="number" name="stock" placeholder="Stock">
+        <input type="date" name="harvest_date">
+        <input type="file" name="image">
+        <button>Add Product</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends 'ustomer/customer_base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3>Checkout</h3>
+
+  <p>Total Amount: <b>₹ {{ total }}</b></p>
+
+  <form method="post">
+    {% csrf_token %}
+    <label>Payment Method</label>
+    <select name="payment_method" class="form-control mb-3">
+      <option value="COD">Cash on Delivery</option>
+      <option value="ONLINE">Online Payment</option>
+    </select>
+
+    <button class="btn btn-success">Place Order</button>
+  </form>
+</div>
+
+{% endblock %}

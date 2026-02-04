@@ -1,0 +1,119 @@
+{% extends 'customer/customer_base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3 class="fw-bold text-success mb-4">🛒 My Cart</h3>
+
+  {% if cart_items %}
+  <table class="table table-bordered align-middle">
+    <thead class="table-success">
+      <tr>
+        <th>#</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Subtotal</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart_items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.product.name }}</td>
+        <td>₹{{ item.product.price }}</td>
+        <td>
+          <form method="post" action="{% url 'update_cart' item.id %}" class="d-flex align-items-center gap-2">
+            {% csrf_token %}
+            <input type="number" name="quantity" value="{{ item.quantity }}"
+                   min="0" class="form-control form-control-sm" style="max-width: 90px;">
+            <button class="btn btn-sm btn-outline-success">Update</button>
+          </form>
+        </td>
+        <td>₹{{ item.subtotal }}</td>
+        <td>
+          <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm"> ❌ Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <a href="{% url 'customer_dashboard' %}" class="btn btn-success btn-sm">Back to Products</a>
+    </div>
+    <div class="text-end">
+      <h4>Total: <span class="text-success">₹{{ total }}</span></h4>
+      <a href="{% url 'orders:place_order' %}" class="btn btn-success mt-2">Place Order</a>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="alert alert-warning text-center">
+    Your cart is empty 🛒
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% comment %} {% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+  <h3 class="mb-4">🛒 My Cart</h3>
+
+  {% if cart_items %}
+  <table class="table table-bordered align-middle">
+    <thead class="table-success">
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th width="120">Quantity</th>
+        <th>Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for item in cart_items %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>₹ {{ item.product.price }}</td>
+
+        <td>
+          <form method="post" action="{% url 'update_cart' item.id %}">
+            {% csrf_token %}
+            <input type="number" name="quantity" value="{{ item.quantity }}"
+                   min="1" class="form-control">
+            <button class="btn btn-sm btn-primary mt-1">Update</button>
+          </form>
+        </td>
+
+        <td>₹ {{ item.total_price }}</td>
+
+        <td>
+          <a href="{% url 'remove_from_cart' item.id %}"
+             class="btn btn-danger btn-sm">
+             Remove
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="text-end">
+    <h4>Total: ₹ {{ total }}</h4>
+    <a href="#" class="btn btn-success mt-2">Proceed to Checkout</a>
+  </div>
+
+  {% else %}
+  <div class="alert alert-warning text-center">
+    Your cart is empty.
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %} {% endcomment %}

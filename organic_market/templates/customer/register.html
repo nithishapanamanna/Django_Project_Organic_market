@@ -1,0 +1,110 @@
+{% extends 'auth_base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow-lg border-0 rounded-4 p-4 col-md-5 col-lg-4">
+
+    <!-- Header -->
+  {% comment %} <div class="card shadow p-4 col-md-4"> {% endcomment %}
+  <div class="text-center mb-4">
+    <h3 class="text-center text-success">🧍 Create Your Account 🧍 </h3>
+      <p class="text-muted">Join GreenHarvest Organics today</p>
+    </div>
+      <form method="post">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Username</label>
+        <div class="input-group">
+          <span class="input-group-text">👤</span>
+          <input type="text" class="form-control" name="username" placeholder="Enter username" required>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <div class="input-group">
+          <span class="input-group-text">📧</span>
+          <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Password</label>
+        <div class="input-group">
+          <span class="input-group-text">🔒</span>
+          <input type="password" class="form-control" name="password" placeholder="Create password" required>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Confirm Password</label>
+        <div class="input-group">
+          <span class="input-group-text">🔒</span>
+          <input type="password" class="form-control" name="password2" placeholder="Re-enter password" required>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Phone</label>
+        <div class="input-group">
+          <span class="input-group-text">📞</span>
+          <input type="text" class="form-control" name="phone" placeholder="Enter phone number" required>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Address</label>
+        <div class="input-group">
+          <span class="input-group-text">🏠</span>
+          <textarea class="form-control" name="address" placeholder="Enter address with pin code" required></textarea>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button class="btn btn-success w-100 mb-3">
+        Register
+      </button> 
+      <div class="text-center mt-3">
+          <small class="text-muted">
+            Already have an account?
+            <a href="{% url 'customer_login' %}" class="text-success fw-semibold text-decoration-none">Login</a>
+          </small>
+  </div>
+</div>
+{% endblock %}
+
+
+{% comment %} {% extends 'base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4 col-md-4">
+    <h3 class="text-center text-success">🛒Customer Registration</h3>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label>Username</label>
+        <input class="form-control" name="username" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" name="email" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" required>
+      </div>
+
+      <button class="btn btn-success w-100">Register</button>
+    </form>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
