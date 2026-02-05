@@ -6,7 +6,7 @@
     <!-- Header -->
   {% comment %} <div class="card shadow p-4 col-md-4"> {% endcomment %}
   <div class="text-center mb-4">
-    <h3 class="text-center text-success">🧍 Create Your Account 🧍 </h3>
+    <h3 class="text-center text-success">🧍 Create Your Account 🛒 </h3>
       <p class="text-muted">Join GreenHarvest Organics today</p>
     </div>
       <form method="post">
@@ -75,36 +75,6 @@
             Already have an account?
             <a href="{% url 'customer_login' %}" class="text-success fw-semibold text-decoration-none">Login</a>
           </small>
-  </div>
+    </div>
 </div>
 {% endblock %}
-
-
-{% comment %} {% extends 'base.html' %}
-{% block content %}
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card shadow p-4 col-md-4">
-    <h3 class="text-center text-success">🛒Customer Registration</h3>
-
-    <form method="post">
-      {% csrf_token %}
-      <div class="mb-3">
-        <label>Username</label>
-        <input class="form-control" name="username" required>
-      </div>
-
-      <div class="mb-3">
-        <label>Email</label>
-        <input class="form-control" name="email" required>
-      </div>
-
-      <div class="mb-3">
-        <label>Password</label>
-        <input type="password" class="form-control" name="password" required>
-      </div>
-
-      <button class="btn btn-success w-100">Register</button>
-    </form>
-  </div>
-</div>
-{% endblock %} {% endcomment %}

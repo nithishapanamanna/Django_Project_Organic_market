@@ -1,26 +1,24 @@
 {% extends "accounts/admin_base.html" %}
 {% block content %}
 <div class="container mt-4">
-<h4>💳 Payments</h4>
-
-<table class="table table-striped">
-<tr>
-<th>Order</th>
-<th>Method</th>
-<th>Status</th>
-<th>Date</th>
-</tr>
-
-{% for p in payments %}
-<tr>
-<td>#{{ p.order.id }}</td>
-<td>{{ p.payment_method }}</td>
-<td>
-<span class="badge bg-info">{{ p.payment_status }}</span>
-</td>
-<td>{{ p.paid_at|date:"d M Y" }}</td>
-</tr>
-{% endfor %}
-</table>
+    <h4>💳 Payments</h4>
+    <table class="table table-striped">
+        <tr>
+            <th>Order</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+        {% for p in payments %}
+        <tr>
+            <td>sl no:{{ p.order.id }}</td>
+            <td>{{ p.payment_method }}</td>
+            <td>
+                <span class="badge bg-info">{{ p.payment_status }}</span>
+            </td>
+            <td>{{ p.paid_at|date:"d M Y" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}

@@ -11,6 +11,7 @@ class FarmerProfile(models.Model):
     location = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='farmers/', null=True, blank=True)
     is_verified = models.BooleanField(default=False)
+    rejection_reason = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

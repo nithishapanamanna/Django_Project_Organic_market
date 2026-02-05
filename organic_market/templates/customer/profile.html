@@ -1,27 +1,7 @@
 {% extends 'customer/customer_base.html' %}
+{% load static %}
 {% block content %}
-<style>
-  .profile-card {
-    border: 0;
-    border-radius: 16px;
-    box-shadow: 0 18px 40px rgba(25, 135, 84, 0.12);
-  }
-  .profile-avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: #6cf7a8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: #198754;
-  }
-  .section-title {
-    font-size: 0.9rem;
-    letter-spacing: 0.06em;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/customer_profile.css' %}">
 
 <div class="container mt-4">
   <div class="row justify-content-center">
@@ -42,10 +22,6 @@
               <label class="form-label fw-semibold">Name</label>
               <input class="form-control" value="{{ request.user.username }}" readonly>
             </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold">Email</label>
-              <input class="form-control" value="{{ request.user.email|default:'—' }}" readonly>
-            </div>
           </div>
 
           {% comment %} <div class="text-muted section-title mb-2">CONTACT</div> {% endcomment %}
@@ -54,6 +30,10 @@
             <div class="mb-3">
               <label class="form-label fw-semibold">Phone</label>
               {{ form.phone }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Email</label>
+              {{ form.email }}
             </div>
             <div class="mb-3">
               <label class="form-label fw-semibold">Address</label>

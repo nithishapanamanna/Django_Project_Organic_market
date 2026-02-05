@@ -17,12 +17,13 @@ User = get_user_model()
 def customer_register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
 
-        if not phone or not address:
+        if not email or not phone or not address:
             messages.error(request, 'All fields are required')
             return redirect('customer_register')
 
@@ -34,8 +35,13 @@ def customer_register(request):
             messages.error(request, 'Username already exists')
             return redirect('customer_register')
 
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists')
+            return redirect('customer_register')
+
         user = User.objects.create_user(
             username=username,
+            email=email,
             password=password
         )
         user.role = 'CUSTOMER'
@@ -109,13 +115,13 @@ def customer_profile(request):
     profile, _ = CustomerProfile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        form = CustomerProfileForm(request.POST, instance=profile)
+        form = CustomerProfileForm(request.POST, instance=profile, user=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated successfully.")
             return redirect('customer_profile')
     else:
-        form = CustomerProfileForm(instance=profile)
+        form = CustomerProfileForm(instance=profile, user=request.user)
 
     return render(request, 'customer/profile.html', {'form': form})
 

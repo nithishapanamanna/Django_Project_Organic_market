@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, get_user_model
 from products.forms import ProductForm
 from .forms import FarmerRegisterForm, FarmerProfileForm
+from .models import FarmerProfile
 from products.models import Product
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from orders.models import OrderItem
 from django.db.models import Sum, F
 from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden
 User = get_user_model()
 
 # ---------- FARMER REGISTER ----------
@@ -93,6 +95,22 @@ def farmer_dashboard(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    rejection_notifications = []
+    if farmer.rejection_reason:
+        rejection_notifications.append({
+            'title': 'Account Rejected',
+            'message': farmer.rejection_reason,
+        })
+
+    rejected_products = products.filter(
+        rejection_reason__isnull=False
+    ).exclude(rejection_reason='')
+    for product in rejected_products:
+        rejection_notifications.append({
+            'title': f"Product Rejected: {product.name}",
+            'message': product.rejection_reason,
+        })
+
     context = {
         'farmer': farmer,
         'products': page_obj,
@@ -103,6 +121,7 @@ def farmer_dashboard(request):
         'low_stock': low_stock,
         'total_orders': total_orders,
         'revenue': revenue,
+        'rejection_notifications': rejection_notifications,
     }
 
     return render(request, 'farmer/dashboard.html', context)
@@ -128,6 +147,7 @@ def add_product(request):
             product = form.save(commit=False)
             product.farmer = farmer
             product.is_approved = False  # Admin approval
+            product.rejection_reason = None
             product.save()
             messages.success(request, "Product submitted for admin approval.")
             return redirect('farmer_dashboard')
@@ -150,6 +170,7 @@ def edit_product(request, product_id):
         if form.is_valid():
             updated = form.save(commit=False)
             updated.is_approved = False
+            updated.rejection_reason = None
             updated.save()
             messages.success(request, "Product updated and sent for admin approval.")
             return redirect('farmer_dashboard')
@@ -191,3 +212,18 @@ def farmer_profile(request):
         form = FarmerProfileForm(instance=farmer)
 
     return render(request, 'farmer/profile.html', {'farmer': farmer, 'form': form})
+
+
+@login_required
+def farmer_public_profile(request, farmer_id):
+    if request.user.role not in ['CUSTOMER', 'ADMIN', 'FARMER']:
+        return HttpResponseForbidden("Access denied")
+    try:
+        farmer = FarmerProfile.objects.get(id=farmer_id)
+    except FarmerProfile.DoesNotExist:
+        return render(
+            request,
+            'farmer/farmer_not_found.html',
+            status=404
+        )
+    return render(request, 'farmer/public_profile.html', {'farmer': farmer})

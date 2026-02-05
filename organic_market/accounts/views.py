@@ -149,6 +149,7 @@ def verify_farmers(request):
 def approve_farmer(request, farmer_id):
     farmer = get_object_or_404(FarmerProfile, id=farmer_id)
     farmer.is_verified = True
+    farmer.rejection_reason = None
     farmer.save()
     messages.success(request, "Farmer approved successfully")
     return redirect('verify_farmers')
@@ -159,9 +160,14 @@ def reject_farmer(request, farmer_id):
     if request.user.role != 'ADMIN':
         return HttpResponseForbidden("Access Denied")
     farmer = get_object_or_404(FarmerProfile, id=farmer_id)
-    farmer.is_verified = False
-    farmer.save()
-    messages.warning(request, "Farmer rejected")
+    if request.method == 'POST':
+        reason = request.POST.get('rejection_reason', '').strip()
+        farmer.is_verified = False
+        farmer.rejection_reason = reason or None
+        farmer.save()
+        messages.warning(request, "Farmer rejected")
+    else:
+        messages.error(request, "Invalid request")
     return redirect('verify_farmers')
 
 
@@ -171,9 +177,24 @@ def approve_products(request):
 
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
-        Product.objects.filter(id=product_id).update(is_approved=True)
-        messages.success(request, "Product approved")
-        return redirect('approve_products')
+        reject_id = request.POST.get('reject_id')
+
+        if product_id:
+            Product.objects.filter(id=product_id).update(
+                is_approved=True,
+                rejection_reason=None
+            )
+            messages.success(request, "Product approved")
+            return redirect('approve_products')
+
+        if reject_id:
+            reason = (request.POST.get('rejection_reason') or '').strip()
+            Product.objects.filter(id=reject_id).update(
+                is_approved=False,
+                rejection_reason=reason or None
+            )
+            messages.warning(request, "Product rejected")
+            return redirect('approve_products')
 
     return render(request, 'accounts/approve_products.html', {
         'products': products
@@ -188,6 +209,8 @@ def manage_orders(request):
         order = Order.objects.get(id=order_id)
         order.status = "DELIVERED"
         order.save()
+        if order.payment_method == "COD":
+            Payment.objects.filter(order=order).update(status="SUCCESS")
         return redirect("manage_orders")
 
     return render(request, "accounts/manage_orders.html", {
@@ -232,7 +255,7 @@ def toggle_user_status(request, user_id):
 
 @staff_member_required
 def manage_payments(request):
-    payments = Payment.objects.all().order_by("-created_at")
+    orders = Order.objects.all().order_by("-created_at")
     total_revenue = (
         Order.objects.filter(status__in=["PAID", "DELIVERED"])
         .aggregate(total=Sum("total_amount"))
@@ -240,7 +263,7 @@ def manage_payments(request):
         or 0
     )
     return render(request, "accounts/payments.html", {
-        "payments": payments,
+        "orders": orders,
         "total_revenue": total_revenue,
     })
 

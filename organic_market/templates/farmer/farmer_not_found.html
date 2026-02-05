@@ -1,0 +1,12 @@
+{% extends 'customer/customer_base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4 text-center">
+      <h4 class="fw-bold mb-2">Farmer Not Found</h4>
+      <p class="text-muted mb-4">The farmer profile you are looking for does not exist.</p>
+      <a href="{% url 'customer_dashboard' %}" class="btn btn-outline-success btn-sm">Back to Products</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

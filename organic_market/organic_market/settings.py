@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'organic_market.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Organic_Market_db',
+        'NAME': 'Organic_Market_db1',
         'USER': 'root',
         'PASSWORD': 'Nithznithi@1',
         'HOST': 'localhost',

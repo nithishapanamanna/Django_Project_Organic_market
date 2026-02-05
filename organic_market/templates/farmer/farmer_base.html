@@ -10,12 +10,33 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="{% url 'farmer_dashboard' %}">GreenHarvest Farmer</a>
+    <a class="navbar-brand fw-bold" href="{% url 'farmer_dashboard' %}">👨‍🌾 GreenHarvest Farmer</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#farmerNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="farmerNav">
       <ul class="navbar-nav ms-auto">
+        {% if rejection_notifications %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Notifications
+              <span class="badge bg-warning text-dark ms-1">{{ rejection_notifications|length }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-2" style="min-width: 280px;">
+              {% for note in rejection_notifications %}
+                <li class="mb-2">
+                  <div class="dropdown-item-text">
+                    <div class="fw-semibold">{{ note.title }}</div>
+                    <small class="text-muted">{{ note.message }}</small>
+                  </div>
+                </li>
+                {% if not forloop.last %}
+                  <li><hr class="dropdown-divider"></li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
         <li class="nav-item"><a class="nav-link" href="{% url 'farmer_dashboard' %}">Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'farmer_profile' %}">Profile</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>

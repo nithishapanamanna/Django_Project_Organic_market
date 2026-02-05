@@ -12,16 +12,37 @@
         <th>Date</th>
         <th>Total</th>
         <th>Status</th>
+        <th>Track</th>
       </tr>
     </thead>
     <tbody>
       {% for order in orders %}
       <tr>
-        <td>#{{ order.id }}</td>
+        <td>{{ forloop.counter }}</td>
         <td>{{ order.created_at|date:"d M Y" }}</td>
         <td>₹{{ order.total_amount }}</td>
         <td>
-          <span class="badge bg-info">{{ order.status }}</span>
+          {% if order.status == 'CANCELLED' %}
+            <span class="badge bg-danger">Cancel</span>
+          {% elif order.status == 'RETURNED' %}
+            <span class="badge bg-secondary">Return</span>
+          {% else %}
+            <span class="badge bg-info">{{ order.status }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'orders:track_order' order.id %}" class="btn btn-outline-success btn-sm">
+            Track
+          </a>
+          {% if order.status == 'DELIVERED' %}
+            <a href="{% url 'orders:return_order' order.id %}" class="btn btn-outline-primary btn-sm ms-1">
+              Return
+            </a>
+          {% elif order.status != 'CANCELLED' and order.status != 'RETURNED' %}
+            <a href="{% url 'orders:cancel_order' order.id %}" class="btn btn-outline-danger btn-sm ms-1">
+              Cancel
+            </a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -33,73 +54,3 @@
 </div>
 
 {% endblock %}
-
-{% comment %} <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Orders</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'customer_dashboard' %}">
-            🌱 Organic Market
-        </a>
-
-        <div class="ms-auto">
-            <a href="{% url 'customer_dashboard' %}" class="btn btn-light btn-sm">
-                ← Back
-            </a>
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-4">
-
-    <h3 class="mb-4">📦 My Orders</h3>
-
-    {% if orders %}
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-success">
-                    <tr>
-                        <th>#</th>
-                        <th>Order ID</th>
-                        <th>Date</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Payment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>#{{ order.id }}</td>
-                        <td>{{ order.created_at|date:"d M Y" }}</td>
-                        <td>₹ {{ order.total_amount }}</td>
-                        <td>
-                            <span class="badge bg-info">
-                                {{ order.status }}
-                            </span>
-                        </td>
-                        <td>{{ order.payment_method }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <p class="text-muted text-center">
-            You haven’t placed any orders yet.
-        </p>
-    {% endif %}
-
-</div>
-
-</body>
-</html> {% endcomment %}

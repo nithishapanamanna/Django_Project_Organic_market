@@ -4,48 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Organic Market{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background:
-              linear-gradient(180deg, rgba(249, 255, 250, 0.95), rgba(245, 248, 255, 0.92)),
-              url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2200&auto=format&fit=crop') center/cover no-repeat fixed;
-        }
-        .hero-title { letter-spacing: 0.2px; }
-        .carousel-item img {
-            height: 420px;
-            object-fit: cover;
-            border-radius: 16px;
-        }
-        .carousel-caption {
-            background: rgba(0, 0, 0, 0.45);
-            border-radius: 12px;
-            padding: 12px 16px;
-        }
-        .carousel-caption h5,
-        .carousel-caption p {
-            color: #ffffff;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
-        }
-        .feature-card {
-            border: 0;
-            border-radius: 14px;
-            box-shadow: 0 12px 30px rgba(25,135,84,0.12);
-        }
-        .feature-card img {
-            height: 180px;
-            object-fit: cover;
-            border-radius: 14px 14px 0 0;
-        }
-        .cta-btn { padding: 10px 18px; }
+        
     </style>
 </head>
 
 <body class="page-container">
 
 <header class="py-4">
-    <h2 class="site-title text-center">🌱 GreenHarvest Organics 🌱</h2>
+    <h2 class="site-title text-center style-icons/font/bootstrap">🌱 GreenHarvest Organics 🌱</h2>
 </header>
 
 <section class="container mb-4">
@@ -71,8 +40,8 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?q=80&w=2000&auto=format&fit=crop" class="d-block w-100" alt="Local farmers market">
-                <div class="carousel-caption d-none d-md-block">
+                <img src="https://agric4profits.com/wp-content/uploads/2023/09/Agri-Products-TheDollarBusiness-1.jpg" class="d-block w-100" alt="Local farmers market">
+                <div class="carousel-caption d-none d-md-block position-center">
                     <h5>Support Local Farmers</h5>
                     <p>Transparent sourcing and fair prices.</p>
                 </div>
@@ -90,7 +59,8 @@
         </button>
     </div>
     <div class="text-center mb-3">
-        <h3 class="hero-title fw-bold text-success">Fresh Organic Products, Direct From Farmers</h3>
+        <h2 class="hero-title fw-bold"  style="color: #5f0a97;">WELCOME TO GREENHARVEST ORGANICS</h2>
+        <h3 class="hero-title fw-bold  fst-italic">Fresh Organic Products, Direct From Farmers</h3>
         <p class="text-muted">Shop seasonal fruits, vegetables, dairy, and pantry staples. Sustainably grown, responsibly sourced, and delivered fresh.</p>
         <a href="{% url 'login' %}" class="btn btn-success cta-btn fw-semibold rounded-3">Shop Now</a>
     </div>
@@ -119,7 +89,7 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="card feature-card h-100">
-                <img src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?q=80&w=1200&auto=format&fit=crop" alt="Sustainable farming">
+                <img src="https://img.freepik.com/premium-photo/big-choice-fresh-fruit-vegetable-market-various-colorful-fresh-fruits-veg-generative-ai_874904-7157.jpg?w=2000q=80&w=1200&auto=format&fit=crop" alt="Sustainable farming">
                 <div class="card-body">
                     <h5 class="card-title">Sustainable Farming</h5>
                     <p class="card-text text-muted">Eco-friendly practices that protect soil and biodiversity.</p>
@@ -131,7 +101,7 @@
 
 <section class="container mb-5">
     <div class="text-center mb-4">
-        <h4 class="fw-bold text-success">Why GreenHarvest?</h4>
+        <h4 class="fw-bold text-Legend">Why GreenHarvest?</h4>
         <p class="text-muted">Pure, fresh, and responsibly sourced — every single day.</p>
     </div>
     <div class="row g-4">
@@ -154,7 +124,7 @@
         <div class="col-12 col-md-4">
             <div class="card feature-card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">🥬 Farm Fresh Produce</h5>
+                    <h5 class="card-title">🥬 Farm Fresh Products</h5>
                     <p class="card-text text-muted">Harvested at peak freshness and delivered straight to your doorstep.</p>
                 </div>
             </div>

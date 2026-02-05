@@ -1,45 +1,57 @@
-/* .login-card {
-  border-radius: 16px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+body { 
+overflow: hidden; 
 }
-
-.login-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
-
-.icon {
-  font-size: 48px;
-}
-
-.farmer-card {
-  border-top: 5px solid #198754;
-}
-
-.customer-card {
-  border-top: 5px solid #0d6efd;
-}
-
-.admin-card {
-  border-top: 5px solid #212529;
-} */
-
 .login-bg {
-  background: url("/static/images/loginpage_bg.jpg") no-repeat center center fixed;
+  background:
+    linear-gradient(rgba(93, 238, 219, 0.85), rgba(255,255,255,0.85)),
+    url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=2000&auto=format&fit=crop");
   background-size: cover;
-  position: center;
+  background-position: center;
 }
-
-/* Dark overlay for readability */
-.login-bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-
-/* Keep content above overlay */
-.login-bg > .container {
-  position: relative;
-  z-index: 1;
+.login-card {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: #ffffff;
+}
+.login-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 50px rgba(0,0,0,0.22);
+}
+.login-card.farmer {
+  background: linear-gradient(180deg, #e9f7ef 0%, #ffffff 70%);
+}
+.login-card.customer {
+  background: linear-gradient(180deg, #e9f1ff 0%, #ffffff 70%);
+}
+.login-card.admin {
+  background: linear-gradient(180deg, #fff5e6 0%, #ffffff 70%);
+}
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: #a2f7c7;
+  color: #198754;
+  font-size: 1.1rem;
+}
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(20, 221, 129, 0.12);
+  color: #4e0511;
 }

@@ -1,0 +1,20 @@
+  .checkout-shell {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .checkout-card {
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 22px 50px rgba(25,135,84,0.14);
+  }
+  .summary-item {
+    border: 0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #f8fbf9;
+  }
+  .summary-badge {
+    font-size: 0.75rem;
+  }

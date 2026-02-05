@@ -8,6 +8,7 @@ urlpatterns = [
     path('farmer/login/', farmer_login, name='farmer_login'),
     path('farmer/register/', farmer_register, name='farmer_register'),
     path('farmer/profile/', farmer_profile, name='farmer_profile'),
+    path('farmer/<int:farmer_id>/', farmer_public_profile, name='farmer_public_profile'),
     path('add-product/', add_product, name='add_product'),
     path('farmer/product/<int:product_id>/edit/', edit_product, name='edit_product'),
     path('farmer/product/<int:product_id>/delete/', delete_product, name='delete_product'),

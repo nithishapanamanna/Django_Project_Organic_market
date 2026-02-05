@@ -1,41 +1,10 @@
-from pyexpat.errors import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Review
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
-
-# def product_list(request):
-#     products = Product.objects.filter(is_approved=True)
-
-#     category = request.GET.get('category')
-#     min_price = request.GET.get('min_price')
-#     max_price = request.GET.get('max_price')
-#     in_stock = request.GET.get('in_stock')
-
-#     if category:
-#         products = products.filter(category=category)
-
-#     if min_price:
-#         products = products.filter(price__gte=min_price)
-
-#     if max_price:
-#         products = products.filter(price__lte=max_price)
-
-#     if in_stock:
-#         products = products.filter(stock__gt=0)
-
-#     categories = Product.CATEGORY
-
-#     return render(request, 'products/product_list.html', {
-#         'products': products,
-#         'categories': categories,
-#         'selected_category': category,
-#     })
-
-
+from django.contrib import messages
 @login_required
 def farmer_products(request):
     if request.user.role != 'FARMER':

@@ -25,8 +25,10 @@ urlpatterns = [
     path('checkout/', checkout, name='checkout'),
     path('place/', place_order, name='place_order'),
     path('my/', my_orders, name='my_orders'),
+    path('track/<int:order_id>/', track_order, name='track_order'),
     path('razorpay/create/', create_razorpay_order, name='razorpay_create'),
     path('cancel/<int:order_id>/', cancel_order, name='cancel_order'),
+    path('return/<int:order_id>/', return_order, name='return_order'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

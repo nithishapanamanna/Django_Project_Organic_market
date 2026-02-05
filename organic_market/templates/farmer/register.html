@@ -1,34 +1,7 @@
 {% extends 'auth_base.html' %}
 {% load static %}
 {% block content %}
-
-<style>
-  .register-wrap {
-    max-width: 520px;
-  }
-  .register-card {
-    border: 0;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(25, 135, 84, 0.12);
-  }
-  .register-badge {
-    display: inline-block;
-    background: #198754;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-  }
-  .form-control, .form-select {
-    border-radius: 10px;
-    padding: 10px 12px;
-  }
-  .form-label {
-    font-weight: 600;
-  }
-</style>
-
+<link rel="stylesheet" href="{% static 'css/farmer_register.css' %}">
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
   <div class="register-wrap w-100">
     <div class="text-center mb-3">

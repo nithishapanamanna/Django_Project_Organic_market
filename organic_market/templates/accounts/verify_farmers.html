@@ -1,14 +1,11 @@
 {% extends "accounts/admin_base.html" %}
 {% block content %}
-
 <div class="container mt-4">
-
     <h3 class="mb-4">👨‍🌾 Farmer Verification</h3>
-
     <table class="table table-bordered table-hover bg-white shadow-sm">
         <thead class="table-success">
             <tr>
-                <th>ID</th>
+                <th>Sl No</th>
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Location</th>
@@ -20,7 +17,7 @@
         <tbody>
         {% for farmer in farmers %}
             <tr>
-                <td>#{{ farmer.id }}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ farmer.user.username }}</td>
                 <td>{{ farmer.phone }}</td>
                 <td>{{ farmer.location }}</td>
@@ -38,11 +35,15 @@
                         <a href="{% url 'approve_farmer' farmer.id %}" class="btn btn-sm btn-success">
                             Approve
                         </a>
-                    {% else %}
-                        <a href="{% url 'reject_farmer' farmer.id %}" class="btn btn-sm btn-danger">
-                            Reject
-                        </a>
                     {% endif %}
+                    <form method="post" action="{% url 'reject_farmer' farmer.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <input type="text" name="rejection_reason" class="form-control form-control-sm d-inline-block w-auto"
+                            placeholder="Reject reason" required>
+                        <button class="btn btn-sm btn-danger" type="submit">
+                            Reject
+                        </button>
+                    </form>
                 </td>
             </tr>
         {% empty %}
@@ -54,7 +55,5 @@
         {% endfor %}
         </tbody>
     </table>
-
 </div>
-
 {% endblock %}

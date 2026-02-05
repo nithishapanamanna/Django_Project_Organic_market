@@ -1,0 +1,42 @@
+{% extends 'customer/customer_base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        {% if farmer.photo %}
+          <img src="{{ farmer.photo.url }}" alt="{{ farmer.user.username }}" class="rounded-circle" style="width:72px;height:72px;object-fit:cover;">
+        {% else %}
+          <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+               style="width:72px;height:72px;">
+            {{ farmer.user.username|slice:":1" }}
+          </div>
+        {% endif %}
+        <div>
+          <h4 class="mb-1">{{ farmer.user.username }}</h4>
+          {% if farmer.is_verified %}
+            <span class="badge bg-success">Verified Farmer</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending Verification</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="text-muted">Phone</div>
+          <div class="fw-semibold">{{ farmer.phone }}</div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="text-muted">Location</div>
+          <div class="fw-semibold">{{ farmer.location }}</div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <a href="{% url 'customer_dashboard' %}" class="btn btn-outline-success btn-sm">Back to Products</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
