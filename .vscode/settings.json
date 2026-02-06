@@ -15,6 +15,38 @@
             "database": "Organic_Market_db",
             "username": "root",
             "password": "Nithznithi@1"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "ORGANICPROJECT",
+            "group": "STUD",
+            "database": "Organic_Market_database",
+            "username": "root",
+            "password": "Nithznithi@1"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "group": "PROJECT",
+            "name": "ORGANICMARKET",
+            "database": "Organic_Market_db1",
+            "username": "root",
+            "password": "Nithznithi@1"
         }
     ]
 }
