@@ -255,15 +255,38 @@ def toggle_user_status(request, user_id):
 
 @staff_member_required
 def manage_payments(request):
-    orders = Order.objects.all().order_by("-created_at")
+    orders = Order.objects.all().order_by("created_at")
+
     total_revenue = (
         Order.objects.filter(status__in=["PAID", "DELIVERED"])
         .aggregate(total=Sum("total_amount"))
-        .get("total")
-        or 0
+        .get("total") or 0
     )
-    return render(request, "accounts/payments.html", {
+
+    total_paid = (
+        Order.objects.filter(status="PAID")
+        .aggregate(total=Sum("total_amount"))
+        .get("total") or 0
+    )
+
+    total_pending = (
+        Order.objects.filter(status="PENDING")
+        .aggregate(total=Sum("total_amount"))
+        .get("total") or 0
+    )
+
+    total_cancelled = (
+        Order.objects.filter(status="CANCELLED")
+        .aggregate(total=Sum("total_amount"))
+        .get("total") or 0
+    )
+
+    context = {
         "orders": orders,
         "total_revenue": total_revenue,
-    })
+        "total_paid": total_paid,
+        "total_pending": total_pending,
+        "total_cancelled": total_cancelled,
+    }
 
+    return render(request, "accounts/payments.html", context)

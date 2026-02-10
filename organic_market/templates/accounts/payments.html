@@ -3,10 +3,41 @@
 <h3 class="mb-4">💳 Payments Overview</h3>
 
 <div class="row mb-4">
-    <div class="col-md-4">
+    {% comment %} <div class="col-md-4">
         <div class="card shadow-sm text-center p-3">
             <h6>Total Revenue</h6>
             <h2 class="text-success">₹ {{ total_revenue }}</h2>
+        </div>
+    </div> {% endcomment %}
+    <!-- Total Revenue -->
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-success">
+            <h6>Total Revenue</h6>
+            <h2 class="text-success">₹ {{ total_revenue }}</h2>
+        </div>
+    </div>
+
+    <!-- Total Paid -->
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-primary">
+            <h6>Total Paid</h6>
+            <h2 class="text-primary">₹ {{ total_paid }}</h2>
+        </div>
+    </div>
+
+    <!-- Total Pending -->
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-warning">
+            <h6>Total Pending</h6>
+            <h2 class="text-warning">₹ {{ total_pending }}</h2>
+        </div>
+    </div>
+
+    <!-- Total Cancelled -->
+    <div class="col-md-3">
+        <div class="card shadow-sm text-center p-3 border-danger">
+            <h6>Total Cancelled</h6>
+            <h2 class="text-danger">₹ {{ total_cancelled }}</h2>
         </div>
     </div>
 </div>

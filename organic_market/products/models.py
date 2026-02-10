@@ -7,6 +7,7 @@ class Product(models.Model):
         ('fruit', 'Fresh Fruits'),
         ('vegetable', 'Daily Vegetables'),
         ('dairy', 'Dairy Products'),
+        ('Grains', 'Grains & Pulses'),
         ('Batter', 'Batter,Breads & Chapati'),
         ('spices', 'Spices & Herbs'),
         ('beverages', 'Beverages'),
