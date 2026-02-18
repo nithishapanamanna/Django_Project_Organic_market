@@ -81,7 +81,7 @@ def farmer_dashboard(request):
     approved_products = products.filter(is_approved=True)
     pending_products = products.filter(is_approved=False)
     total_products = products.count()
-    low_stock = products.filter(stock__lte=50)
+    low_stock = products.filter(stock__lte=5)
 
     order_items = OrderItem.objects.filter(farmer=farmer)
     paid_items = order_items.filter(order__status__in=['PAID', 'DELIVERED'])
